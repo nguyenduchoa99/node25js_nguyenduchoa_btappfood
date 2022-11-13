@@ -22,7 +22,9 @@ FOREIGN KEY (type_id) REFERENCES food_type(type_id)
 INSERT INTO food VALUES
 (0,"Bún Chay","alt",20,"ngon",2),
 (0,"Sườn Nuóng","alt",100,"Best seller",1),
-(0,"Bò Kho","alt",45,"ngon",1)
+(0,"Bò Kho","alt",45,"ngon",1),
+(0,"Bún măn vịt",30,"ngon",1),
+(0,"Cơm chay",15,"ngon",2)
 
 CREATE TABLE user_food(
 user_id INT PRIMARY KEY AUTO_INCREMENT,
@@ -34,7 +36,10 @@ password VARCHAR(255)
 INSERT INTO user_food VALUES
 (0,"Hiep Nguyen", "hiep123@gmail.com","1904"),
 (0,"Sang Nguyen","sang123@gmail.com","1904"),
-(0,"Khanh Nguyen","khanh123@gmail.com","1904")
+(0,"Khanh Nguyen","khanh123@gmail.com","1904"),
+(0,"Kreslit Nguyen","kreslit123@gmail.com","1904"),
+(0,"Hoa Nguyen","hoa123@gmail.com","1904"),
+(0,"Nhi Nguyen","Nhi123@gmail.com","1904")
 
 CREATE TABLE restaurant(
 res_id INT PRIMARY KEY AUTO_INCREMENT,
@@ -58,11 +63,12 @@ food_id INT,
 FOREIGN KEY (food_id) REFERENCES food(food_id)
 )
 
-INSERT INTO sub_food VALUES11
-(0,"Sườn thêm",50,4),
-(0,"Cơm thêm",5,2),
-(0,"Rau thêm",10,3),
-(0,"Vịt thêm",20,1)
+INSERT INTO sub_food VALUES
+(0,"Sườn thêm",50,2),
+(0,"Cơm thêm",5,5),
+(0,"Rau thêm",10,1),
+(0,"Vịt thêm",20,4),
+(0,"Bánh mì",5,3)
 
 
 CREATE TABLE order_food(
@@ -77,12 +83,12 @@ PRIMARY KEY (user_id,food_id)
 )
 
 INSERT INTO order_food VALUES
-(1,4,5,"Suon","1"),
-(3,2,3,"CChay","3"),
-(2,5,3,"Bo","9"),
-(4,1,6,"Vit","7"),
-(5,3,2,"BChay","4"),
-(1,5,9,"Bo","10")
+(1,2,5,"Suon","1"),
+(3,5,3,"CChay","3"),
+(2,3,3,"Bo","9"),
+(4,4,6,"Vit","7"),
+(5,1,2,"BChay","4"),
+(1,3,9,"Bo","10")
 
 
 CREATE TABLE rate_res(

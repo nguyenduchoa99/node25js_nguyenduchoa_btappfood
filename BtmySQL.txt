@@ -1,0 +1,156 @@
+CREATE DATABASE bt_node
+
+USE bt_node
+
+CREATE TABLE food_type(
+type_id INT PRIMARY KEY AUTO_INCREMENT,
+type_name VARCHAR(255)
+)
+
+INSERT INTO food_type VALUES(0,"Mặn"),(0,"Chay")
+
+CREATE TABLE food(
+food_id INT PRIMARY KEY AUTO_INCREMENT,
+food_name VARCHAR(255),
+image VARCHAR(255),
+price FLOAT,
+desc_food VARCHAR(255),
+type_id INT,
+FOREIGN KEY (type_id) REFERENCES food_type(type_id)
+)
+
+INSERT INTO food VALUES
+(0,"Bún Chay","alt",20,"ngon",2),
+(0,"Sườn Nuóng","alt",100,"Best seller",1),
+(0,"Bò Kho","alt",45,"ngon",1)
+
+CREATE TABLE user_food(
+user_id INT PRIMARY KEY AUTO_INCREMENT,
+full_name VARCHAR(255),
+email VARCHAR(255),
+password VARCHAR(255)
+)
+
+INSERT INTO user_food VALUES
+(0,"Hiep Nguyen", "hiep123@gmail.com","1904"),
+(0,"Sang Nguyen","sang123@gmail.com","1904"),
+(0,"Khanh Nguyen","khanh123@gmail.com","1904")
+
+CREATE TABLE restaurant(
+res_id INT PRIMARY KEY AUTO_INCREMENT,
+res_name VARCHAR(255),
+image VARCHAR(255),
+desc_res VARCHAR(255)
+)
+
+INSERT INTO restaurant VALUES
+(0,"SHRI","alt","4 stars"),
+(0,"PIZZA 4P's","alt","3 starts"),
+(0,"EOR 51","alt","5 stars"),
+(0,"Namo pizza","alt","3 stars"),
+(0,"Social club","alt","5 stars")
+
+CREATE TABLE sub_food(
+sub_id INT PRIMARY KEY AUTO_INCREMENT,
+sub_name VARCHAR(255),
+sub_price FLOAT,
+food_id INT,
+FOREIGN KEY (food_id) REFERENCES food(food_id)
+)
+
+INSERT INTO sub_food VALUES11
+(0,"Sườn thêm",50,4),
+(0,"Cơm thêm",5,2),
+(0,"Rau thêm",10,3),
+(0,"Vịt thêm",20,1)
+
+
+CREATE TABLE order_food(
+user_id INT,
+food_id INT,
+amount INT,
+code VARCHAR(255),
+arr_sub_id VARCHAR(255),
+FOREIGN KEY (user_id) REFERENCES user_food(user_id),
+FOREIGN KEY (food_id) REFERENCES food(food_id),
+PRIMARY KEY (user_id,food_id)
+)
+
+INSERT INTO order_food VALUES
+(1,4,5,"Suon","1"),
+(3,2,3,"CChay","3"),
+(2,5,3,"Bo","9"),
+(4,1,6,"Vit","7"),
+(5,3,2,"BChay","4"),
+(1,5,9,"Bo","10")
+
+
+CREATE TABLE rate_res(
+user_id INT,
+res_id INT,
+amount INT,
+date_rate DATETIME,
+FOREIGN KEY (user_id) REFERENCES user_food(user_id),
+FOREIGN KEY (res_id) REFERENCES restaurant(res_id),
+PRIMARY KEY (user_id,res_id)
+)
+
+INSERT INTO rate_res VALUES
+(1,3,9,"2021-03-04 19:15:00"),
+(1,5,10,"2022-04-19 20:10:15"),
+(3,1,8,"2022-05-20 10:37:00"),
+(2,2,8,"2020-07-13"),
+(4,4,9,"2021-12-11 17:26:00"),
+(5,3,10,"2022-10-27 18:35:26")
+
+CREATE TABLE like_res(
+user_id INT,
+res_id INT,
+date_like DATETIME,
+FOREIGN KEY (user_id) REFERENCES user_food(user_id),
+FOREIGN KEY (res_id) REFERENCES restaurant(res_id),
+PRIMARY KEY (user_id,res_id)
+)
+
+INSERT INTO like_res VALUES
+(1,5,"2022-04-19 20:11:12"),
+(1,3,"2021-03-04 19:16:13"),
+(3,1,"2022-05-20 10:38:23"),
+(2,2,"2020-07-13"),
+(4,4,"2021-12-11 17:28:10"),
+(5,3,"2022-10-27 18:37:20")
+
+# Tìm 5 người đã like nhà hàng nhiều nhất
+
+SELECT user_id, COUNT(*) AS total_res_like
+FROM like_res 
+GROUP BY user_id
+LIMIT 5
+
+# Tìm 2 nhà hàng có lượt like nhiều nhất
+
+SELECT res_id, COUNT(*) AS total_like
+FROM like_res
+GROUP BY res_id
+ORDER BY total_like DESC
+LIMIT 2
+
+# Tìm người đã đặt hàng nhiều nhất
+
+SELECT user_id, COUNT(*) AS total_order FROM order_food
+GROUP BY user_id 
+ORDER BY total_order DESC
+
+# Tìm người dùng không hoạt động
+SELECT *
+FROM user_food AS uf LEFT JOIN order_food AS orf ON uf.user_id = orf.user_id
+					 LEFT JOIN like_res AS lir ON uf.user_id = lir.user_id
+					 LEFT JOIN rate_res AS rar ON uf.user_id = rar.user_id
+WHERE orf.user_id IS null AND lir.user_id IS null AND rar.user_id IS null
+
+# Tính trung bình sub_food của một food
+
+SELECT COUNT(*) FROM food;
+SELECT COUNT(*) FROM sub_food;
+
+SELECT (SELECT COUNT(*) FROM sub_food) / (SELECT COUNT(*) FROM food) AS avg_sub_food_of_food;
